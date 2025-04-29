@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Register</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h2>User Registration</h2>
+  <form id="registerForm">
+    <input type="text" id="name" placeholder="Full Name" required><br>
+    <input type="email" id="email" placeholder="Email" required><br>
+    <input type="password" id="password" placeholder="Password" required><br>
+    <button type="submit">Register</button>
+  </form>
+  
+  <script>
+    document.getElementById("registerForm").addEventListener("submit", async function(e) {
+      e.preventDefault(); // prevents page reload
+  
+      const user = {
+        name: document.getElementById("name").value,
+        email: document.getElementById("email").value,
+        password: document.getElementById("password").value
+      };
+  
+      try {
+        const response = await fetch("http://localhost:8080/users/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(user)
+        });
+  
+        if (response.ok) {
+          alert("Registered Successfully!");
+        } else {
+          const error = await response.text();
+          alert("Registration failed: " + error);
+        }
+      } catch (err) {
+        console.error("Error:", err);
+        alert("Something went wrong. See console.");
+      }
+    });
+  </script>
+  
