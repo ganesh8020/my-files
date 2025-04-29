@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Apply for Job</title>
+  <style>
+    body {
+      background-color: #e0f7fa; /* light blue */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      font-family: Arial, sans-serif;
+    }
+
+    .form-container {
+      background-color: #ffffff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      width: 400px;
+    }
+
+    input {
+      width: 90%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #0288d1;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0277bd;
+    }
+
+    #responseMsg {
+      margin-top: 20px;
+      font-weight: bold;
+      color: green;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="form-container">
+    <h2>Apply for Job</h2>
+    <form id="applyForm">
+      <input type="number" id="jobId" placeholder="Job ID" required><br>
+      <input type="number" id="userId" placeholder="User ID" required><br>
+      <input type="text" id="resumePath" placeholder="Resume Path (e.g., resume.pdf)" required><br>
+      <button type="submit">Apply</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <a href="index.html">← Back to Home</a>
+    </form>
+
+    <p id="responseMsg"></p>
+  </div>
+
+  <script>
+    document.getElementById("applyForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const application = {
+        jobId: document.getElementById("jobId").value,
+        userId: document.getElementById("userId").value,
+        resumePath: document.getElementById("resumePath").value
+      };
+
+      fetch("http://localhost:8080/job/apply", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(application)
+      })
+      .then(response => {
+        if (!response.ok) throw new Error("Network error");
+        return response.text();
+      })
+      .then(data => {
+        document.getElementById("responseMsg").innerText = data;
+      })
+      .catch(error => {
+        document.getElementById("responseMsg").innerText = "Error occurred during application";
+        console.error("Error:", error);
+      });
+    });
+  </script>
+
+</body>
+</html>

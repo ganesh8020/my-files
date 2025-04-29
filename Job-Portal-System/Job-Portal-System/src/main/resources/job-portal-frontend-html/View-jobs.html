@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>View All Jobs</title>
+  <style>
+    body {
+      background-color: #e0f7fa;
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+
+    h1 {
+      color: #00796b;
+    }
+
+    table {
+      margin: 0 auto;
+      border-collapse: collapse;
+      width: 80%;
+      background-color: #ffffff;
+    }
+
+    th, td {
+      padding: 12px;
+      border: 1px solid #ccc;
+    }
+
+    th {
+      background-color: #b2ebf2;
+    }
+
+    a {
+      display: inline-block;
+      margin-top: 20px;
+      text-decoration: none;
+      color: #00796b;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>Available Jobs</h1>
+
+  <table id="jobsTable">
+    <thead>
+      <tr>
+        <th>Job ID</th>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Company</th>
+        <th>Location</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Jobs will be populated here -->
+    </tbody>
+  </table>
+
+  <a href="index.html">← Back to Home</a>
+
+  <script>
+    fetch('http://localhost:8080/job/jobs')
+      .then(response => response.json())
+      .then(jobs => {
+        const tbody = document.querySelector('#jobsTable tbody');
+        jobs.forEach(job => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${job.id}</td>
+            <td>${job.title}</td>
+            <td>${job.description}</td>
+            <td>${job.company}</td>
+            <td>${job.location}</td>
+          `;
+          tbody.appendChild(row);
+        });
+      })
+      .catch(error => {
+        alert("Failed to load jobs. Check your server or network.");
+        console.error("Error fetching jobs:", error);
+      });
+  </script>
+</body>
+</html>

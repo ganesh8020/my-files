@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Book a Room</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h2>Book a Room</h2>
+  <form id="bookForm">
+    <input type="number" id="roomId" placeholder="Room ID" required><br>
+    <input type="date" id="checkIn"><br>
+    <input type="date" id="checkOut"><br>
+    <button type="submit">Book</button>
+  </form>
+
+  <script>
+    document.getElementById("bookForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+  
+      const booking = {
+        userId: localStorage.getItem("userId"), // Ensure this exists
+        roomId: document.getElementById("roomId").value,
+        checkInDate: document.getElementById("checkIn").value,
+        checkOutDate: document.getElementById("checkOut").value,
+        totalPrice: 0 // Backend should ideally calculate this
+      };
+  
+      try {
+        const res = await fetch("http://localhost:8080/bookings/make", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify(booking)
+});
+
+if (res.ok) {
+  alert("Room booked successfully!");
+} else {
+  alert("Booking failed.");
+}
+
+      } catch (error) {
+        alert("Error: " + error.message);
+      }
+    });
+  </script>
+  
+</body>
+</html>
